@@ -11,10 +11,10 @@ import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.uqbar.edu.paiu.examples.celulares.application.BuscadorCelular;
 import org.uqbar.edu.paiu.examples.celulares.dao.RepositorioCelulares;
 import org.uqbar.edu.paiu.examples.celulares.domain.Celular;
 import org.uqbar.edu.paiu.examples.celulares.domain.ModeloCelular;
-import org.uqbar.edu.paiu.examples.celulares.ui.arena.BuscadorCelular;
 
 /**
  * Homepage

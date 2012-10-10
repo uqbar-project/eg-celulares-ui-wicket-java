@@ -2,7 +2,6 @@ package uqbar.celulares.ui.wicket;
 
 import java.util.List;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;

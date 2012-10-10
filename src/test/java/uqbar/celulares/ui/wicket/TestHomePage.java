@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import org.apache.wicket.util.tester.WicketTester;
 
 import uqbar.celulares.ui.wicket.BusquedaCelularesPage;
-import uqbar.celulares.ui.wicket.WicketApplication;
+import uqbar.celulares.ui.wicket.app.WicketApplication;
 
 
 /**
