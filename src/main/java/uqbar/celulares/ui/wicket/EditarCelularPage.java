@@ -14,45 +14,35 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.uqbar.commons.model.UserException;
-import org.uqbar.edu.paiu.examples.celulares.dao.RepositorioCelulares;
-import org.uqbar.edu.paiu.examples.celulares.dao.RepositorioModelos;
-import org.uqbar.edu.paiu.examples.celulares.domain.Celular;
-import org.uqbar.edu.paiu.examples.celulares.domain.ModeloCelular;
+
+import uqbar.celulares.domain.Celular;
+import uqbar.celulares.domain.ModeloCelular;
+import uqbar.celulares.domain.RepositorioCelulares;
+import uqbar.celulares.domain.RepositorioModelos;
 
 /**
- * Homepage
+ * Pagina de edicion de un celular.
  */
 public class EditarCelularPage extends WebPage {
-
 	private static final long serialVersionUID = 1L;
-
 	private final Celular celular;
 	private final boolean alta;
 	private final BusquedaCelularesPage mainPage; 
 
-	/**
-	 * Constructor that is invoked when page is invoked without a session.
-	 * 
-	 * @param parameters
-	 *            Page parameters
-	 */
 	public EditarCelularPage(Celular celularAEditar, BusquedaCelularesPage mainPage) {
 		this.mainPage = mainPage;
 		
 		this.alta = celularAEditar.isNew();
 		this.celular = celularAEditar;
-		if (this.alta) {
-			add(new Label("titulo", "Nuevo Celular"));
-		} else {
-			add(new Label("titulo", "Editar Datos del Celular"));
-		}
+		this.add(new Label("titulo", this.alta ? "Nuevo Celular" : "Editar Datos del Celular"));
+		
 		Form<Celular> buscarForm = new Form<Celular>("nuevoCelularForm", new CompoundPropertyModel<Celular>(this.celular));
-		this.generarCamposEdicion(buscarForm);
-		this.generarAcciones(buscarForm);
+		this.agregarCamposEdicion(buscarForm);
+		this.agregarAcciones(buscarForm);
 		this.add(buscarForm);
 	}
 
-	private void generarAcciones(Form<Celular> parent) {
+	private void agregarAcciones(Form<Celular> parent) {
 		parent.add(new Button("aceptar") {
 			@Override
 			public void onSubmit() {
@@ -65,7 +55,7 @@ public class EditarCelularPage extends WebPage {
 						homeCelulares.delete(EditarCelularPage.this.celular);
 						homeCelulares.create(EditarCelularPage.this.celular);
 					}
-					EditarCelularPage.this.volver();
+					volver();
 				} catch (UserException e) {
 					info(e.getMessage());
 				} catch (Exception e) {
@@ -76,7 +66,7 @@ public class EditarCelularPage extends WebPage {
 		parent.add(new Button("cancelar") {
 			@Override
 			public void onSubmit() {
-				EditarCelularPage.this.volver();
+				volver();
 			}
 
 		});
@@ -95,26 +85,30 @@ public class EditarCelularPage extends WebPage {
 		this.setResponsePage(mainPage);
 	}
 
-	private void generarCamposEdicion(Form<Celular> parent) {
+	private void agregarCamposEdicion(Form<Celular> parent) {
 		parent.add(new TextField<String>("numero"));
 		parent.add(new TextField<String>("nombre"));
-		parent.add(new DropDownChoice<ModeloCelular>("modeloCelular", new LoadableDetachableModel<List<ModeloCelular>>() {
+		parent.add(new DropDownChoice<ModeloCelular>("modeloCelular", crearModeloListaModelosCelulares(), createModeloCelularChoiceRenderer()));
+		parent.add(new CheckBox("recibeResumenCuenta"));
+		parent.add(new FeedbackPanel("feedbackPanel"));
+	}
 
-			@Override
-			protected List<ModeloCelular> load() {
-				return RepositorioModelos.getInstance().getModelos();
-			}
-
-		}, new ChoiceRenderer<ModeloCelular>() {
-
+	protected ChoiceRenderer<ModeloCelular> createModeloCelularChoiceRenderer() {
+		return new ChoiceRenderer<ModeloCelular>() {
 			@Override
 			public Object getDisplayValue(ModeloCelular object) {
 				return object.getDescripcion();
 			}
+		};
+	}
 
-		}));
-		parent.add(new CheckBox("recibeResumenCuenta"));
-		parent.add(new FeedbackPanel("feedbackPanel"));
+	protected LoadableDetachableModel<List<ModeloCelular>> crearModeloListaModelosCelulares() {
+		return new LoadableDetachableModel<List<ModeloCelular>>() {
+			@Override
+			protected List<ModeloCelular> load() {
+				return RepositorioModelos.getInstance().getModelos();
+			}
+		};
 	}
 
 }
